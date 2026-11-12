@@ -1,9 +1,8 @@
-# Mouhamadou Matar Docky Diop | Portfolio de finance quantitative
+# Allocation d’un portefeuille multi-actifs
 
-Mathématiques appliquées à la finance · CY Tech  
-**Projet — Allocation stratégique multi-actifs sous contraintes**
+Mouhamadou Matar Docky Diop · Mathématiques appliquées à la finance, CY Tech
 
-Combien de rendement un investisseur a-t-il sacrifié pour réduire son risque sur la période étudiée ? Ce projet compare quatre méthodes d'allocation et une référence fixe avec le même univers, les mêmes limites et le même calendrier.
+Comment répartir 100 dollars entre actions, obligations, or et immobilier coté ? Je compare quatre façons de choisir cette répartition. Pour avoir un point de comparaison, je garde aussi un portefeuille simple qui revient chaque mois à 40 dollars en actions, 40 en obligations, 10 en or et 10 en immobilier pour 100 dollars investis.
 
 [Classeur Excel](results/allocation.xlsx) · [Code Python](allocation.py) · [Allocations mensuelles](results/poids.csv)
 
@@ -21,9 +20,11 @@ Combien de rendement un investisseur a-t-il sacrifié pour réduire son risque s
 | Sharpe maximal | 8,73 % | 8,29 % | 0,81 | −18,52 % |
 | Référence fixe | 8,00 % | 8,83 % | 0,69 | −19,15 % |
 
-Markowitz détenait en moyenne 58,5 % d’actions américaines, près du plafond de 60 %. Il termine en tête en rendement avec la plus forte volatilité. La variance minimale plaçait en moyenne 70 % en obligations et a subi une baisse maximale de 15,30 %. Le mandat obligataire a donc atteint sa borne supérieure. Le portefeuille de Sharpe maximal a dépassé la référence fixe en rendement avec une volatilité plus basse, au prix d’une rotation annuelle de 40,44 % contre 11,12 %.
+Sur cette période, Markowitz donne le rendement le plus élevé, mais c’est aussi le portefeuille dont la valeur fluctue le plus. En regardant les poids mensuels, on retrouve en moyenne 58,5 % en actions, pour un maximum autorisé de 60 %.
 
-## Univers et mandat
+Pourquoi le portefeuille « Sharpe maximal » arrive-t-il deuxième sur son propre critère ? Chaque mois, le programme choisit les poids à partir des cinq années **précédentes**. Le tableau mesure ensuite ce que ces poids ont donné le mois **suivant**. C’est ce décalage entre estimation et résultat qui permet de comparer les méthodes en conditions de backtest.
+
+## Les quatre ETF et leurs limites
 
 | Exposition | ETF | Minimum | Maximum | Référence |
 |---|---|---:|---:|---:|
@@ -44,7 +45,7 @@ Les rendements simples mensuels donnent une moyenne arithmétique μ et une cova
 - **Sharpe maximal** maximise (wᵀμ − 2 %)/√v. Le Sharpe réalisé utilise ensuite les rendements nets observés.
 - **Référence fixe** revient aux poids 40/40/10/10 chaque mois.
 
-## Protocole et limites
+## Comment se déroule un mois de backtest ?
 
 Les cours ajustés de fin de mois proviennent des clôtures quotidiennes ajustées de Yahoo Finance, de janvier 2010 à décembre 2025. Le CSV figé permet de reproduire le résultat hors ligne. Le fournisseur peut réviser son historique. [Script de collecte et URL source](download.py)
 
@@ -66,4 +67,4 @@ python allocation.py
 
 Le script actualise les CSV et le graphique dans results/. Le classeur fourni est un instantané des résultats. Pour le régénérer dans un environnement Node disposant de @oai/artifact-tool, exécuter node excel.mjs. La collecte facultative se relance avec python download.py.
 
-Pour explorer l’effet du mandat, modifier BOUNDS, AVERSION, RF, COST ou WINDOW dans allocation.py. Conserver la référence fixe compatible avec les nouvelles bornes. Les fichiers transactions.csv et capital.csv permettent de réconcilier le rendement net de chaque mois avec l’évolution du portefeuille.
+Pour essayer une autre limite sur les actions, modifier la première paire de valeurs de `BOUNDS` dans `allocation.py`. Conserver la référence fixe compatible avec les nouvelles bornes. Les fichiers transactions.csv et capital.csv permettent de réconcilier le rendement net de chaque mois avec l’évolution du portefeuille.
